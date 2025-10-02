@@ -19,7 +19,8 @@ services:
       - "traefik.http.routers.fraktion-secure.rule=Host(`fraktion.spd-ratingen.net`)"
       - "traefik.http.routers.fraktion-secure.tls=true"
       - "traefik.http.routers.fraktion-secure.tls.certresolver=production"
-
+    networks:
+      - traefik-network
     # Uncomment if you want to use a custom .env file
     # env_file:
     #   - .env
@@ -28,3 +29,6 @@ services:
 #   db:
 #     image: postgres:15
 #     ...
+networks:
+  traefik-network:
+    external: true
