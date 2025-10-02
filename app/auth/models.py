@@ -1,7 +1,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from presence.models import Committee, Function
+from admin.models import Committee, Function
 
 
 # Person: Name, Username, Email, Function, Committee membership, User link

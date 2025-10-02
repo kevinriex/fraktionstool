@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'tailwind',
     'theme',
     'auth.apps.CustomAuthConfig',
+    'admin.apps.CustomAdminConfig',
 ]
 
 TAILWIND_APP_NAME = 'theme'
