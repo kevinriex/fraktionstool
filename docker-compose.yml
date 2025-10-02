@@ -10,7 +10,6 @@ services:
       - PYTHONDONTWRITEBYTECODE=1
       - PYTHONUNBUFFERED=1
     labels:
-labels:
       - "traefik.enable=true"
       - "traefik.http.routers.fraktion.rule=Host(`fraktion.spd-ratingen.net`)"
       - "traefik.http.routers.fraktion.entrypoints=web"
