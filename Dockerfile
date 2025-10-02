@@ -1,35 +1,46 @@
-# Dockerfile for Django + Tailwind
-FROM python:3.13-slim
+# --- Stage 1: Node/Tailwind Build ---
+FROM node:20-slim as frontend
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+WORKDIR /frontend
 
-# Set work directory
+# Falls du ein package.json für Tailwind/JS hast:
+COPY ./app/package*.json ./
+RUN npm install
+
+# Copy restliches Projekt (für Tailwind Config etc.)
+COPY ./app ./
+
+# Baue Tailwind (CSS wird in /frontend/static oder wo du's definierst generiert)
+RUN npm run build || echo "Kein build script definiert"
+
+
+# --- Stage 2: Python Backend ---
+FROM python:3.13-slim as backend
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
+# System-Dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        build-essential \
+        libpq-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install system dependencies and Node.js (for Tailwind)
-RUN apt-get update && \
-    apt-get install -y build-essential libpq-dev curl gnupg && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g rimraf && \
-    rm -rf /var/lib/apt/lists/*
+# Python Dependencies
+COPY ./app/requirements.txt /app/
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
-# Copy requirements (if exists) and install
-COPY ./app/requirements.txt /app/requirements.txt
-RUN pip install --upgrade pip && \
-    if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-
-# Copy project
+# Kopiere Django-Projekt
 COPY ./app /app
 
-# Install Tailwind dependencies (if needed)
-RUN if [ -f manage.py ]; then python manage.py tailwind install; fi
+# --- Wichtiger Teil: Kopiere nur die fertigen Assets von Stage 1 ---
+COPY --from=frontend /frontend/static /app/static
 
-# Expose port
+# Expose Port
 EXPOSE 8000
 
-# Default command
-CMD ["sh", "-c", "python manage.py migrate && python manage.py tailwind build && python manage.py runserver 0.0.0.0:8000"]
+# Startkommando
+CMD ["sh", "-c", "python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000"]
