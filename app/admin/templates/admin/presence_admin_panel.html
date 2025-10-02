@@ -1,0 +1,45 @@
+{% extends "theme/base.html" %}
+{% block content %}
+<div class="flex items-center justify-center min-h-screen flex-col">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img
+      src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png"
+      alt="SPD Ratingen LOGO"
+      class="mx-auto h-20 w-auto"
+    />
+    <h1 class="mb-10 text-center text-2xl font-bold tracking-tight text-white">
+      Anwesenheit-Verwaltung
+    </h1>
+  </div>
+  <div class="grid grid-cols-2 gap-8 pt-10">
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Alle Nutzer</h2>
+      {% if users %}
+        <ul class="space-y-2">
+          {% for user in users %}
+            <li class="p-2 border-b">{{ user.name }} ({{ user.username }})</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Keine Berechtigung, alle Nutzer zu sehen.</p>
+      {% endif %}
+    </div>
+    <div class="bg-white rounded-lg shadow p-6">
+      <h2 class="text-xl font-semibold mb-4">Alle Termine</h2>
+      {% if appointments %}
+        <ul class="space-y-2">
+          {% for appointment in appointments %}
+            <li class="p-2 border-b">
+              <span class="font-semibold">{{ appointment.committee.name }}</span><br>
+              <span>{{ appointment.date|date:"d.m.Y H:i" }}</span><br>
+              <span class="text-gray-500">Ort: {{ appointment.location.name }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>Keine Berechtigung, alle Termine zu sehen.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

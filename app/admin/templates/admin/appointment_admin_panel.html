@@ -1,0 +1,101 @@
+{% extends "theme/base.html" %}
+{% block content %}
+<div class="flex min-h-screen">
+  <div class="w-1/4 bg-gray-100 p-4 border-r">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <img src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png" alt="SPD Ratingen LOGO" class="mx-auto h-20 w-auto" />
+      <h1 class="mb-10 text-center text-2xl font-bold tracking-tight text-black">Termin-Verwaltung</h1>
+    </div>
+    <h2 class="text-lg font-semibold mb-4">Termine</h2>
+    <form method="get" class="mb-4">
+      <label for="appointment_select" class="font-semibold">Termin auswählen:</label>
+      <select id="appointment_select" name="appointment" class="border rounded px-2 py-1 w-full" onchange="this.form.submit()">
+        <option value="">-- Termin wählen --</option>
+        {% for appointment in appointments %}
+          <option value="{{ appointment.id }}" {% if selected_appointment and appointment.id == selected_appointment.id %}selected{% endif %}>
+            {{ appointment.committee }} am {{ appointment.date|date:"d.m.Y H:i" }} in {{ appointment.location }}
+          </option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <div class="flex-1 flex flex-col items-center justify-center">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow p-6 mt-8">
+      {% if selected_appointment %}
+        <h2 class="text-xl font-semibold mb-4">Termin Details</h2>
+        <form method="post" class="space-y-2">
+          {% csrf_token %}
+          <div>
+            <label class="font-semibold">Gremium:</label>
+            <select name="committee" class="border rounded px-2 py-1 w-full">
+              {% for committee in committees %}
+                <option value="{{ committee.id }}" {% if selected_appointment.committee.id == committee.id %}selected{% endif %}>{{ committee.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold">Ort:</label>
+            <select name="location" class="border rounded px-2 py-1 w-full">
+              {% for location in locations %}
+                <option value="{{ location.id }}" {% if selected_appointment.location and selected_appointment.location.id == location.id %}selected{% endif %}>{{ location.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold">Datum & Uhrzeit:</label>
+            <input type="datetime-local" name="date" value="{{ selected_appointment.date|date:'Y-m-d\\TH:i' }}" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div>
+            <label class="font-semibold">Anwesende:</label>
+            <select name="attendees" multiple class="border rounded px-2 py-1 w-full">
+              {% for user in users %}
+                <option value="{{ user.id }}" {% if user in selected_appointment.attendees.all %}selected{% endif %}>{{ user.get_full_name|default:user.username }}</option>
+              {% endfor %}
+            </select>
+            <small>Mehrfachauswahl mit Strg/Cmd</small>
+          </div>
+          <div class="flex gap-2">
+            <button type="submit" name="action" value="update" class="bg-blue-600 text-white px-4 py-2 rounded">Speichern</button>
+            <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-4 py-2 rounded" onclick="return confirm('Wirklich löschen?')">Löschen</button>
+          </div>
+        </form>
+      {% else %}
+        <h2 class="text-xl font-semibold mb-4">Neuen Termin anlegen</h2>
+        <form method="post" class="space-y-2">
+          {% csrf_token %}
+          <div>
+            <label class="font-semibold">Gremium:</label>
+            <select name="committee" class="border rounded px-2 py-1 w-full">
+              {% for committee in committees %}
+                <option value="{{ committee.id }}">{{ committee.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold">Ort:</label>
+            <select name="location" class="border rounded px-2 py-1 w-full">
+              {% for location in locations %}
+                <option value="{{ location.id }}">{{ location.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div>
+            <label class="font-semibold">Datum & Uhrzeit:</label>
+            <input type="datetime-local" name="date" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div>
+            <label class="font-semibold">Anwesende:</label>
+            <select name="attendees" multiple class="border rounded px-2 py-1 w-full">
+              {% for user in users %}
+                <option value="{{ user.id }}">{{ user.get_full_name|default:user.username }}</option>
+              {% endfor %}
+            </select>
+            <small>Mehrfachauswahl mit Strg/Cmd</small>
+          </div>
+          <button type="submit" name="action" value="create" class="bg-green-600 text-white px-4 py-2 rounded">Anlegen</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

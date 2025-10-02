@@ -1,0 +1,49 @@
+{% extends "theme/base.html" %}
+{% block content %}
+<div class="flex min-h-screen">
+  <div class="w-1/4 bg-gray-100 p-4 border-r">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <img src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png" alt="SPD Ratingen LOGO" class="mx-auto h-20 w-auto" />
+      <h1 class="mb-10 text-center text-2xl font-bold tracking-tight text-black">Orte-Verwaltung</h1>
+    </div>
+    <h2 class="text-lg font-semibold mb-4">Orte</h2>
+    <form method="get" class="mb-4">
+      <label for="location_select" class="font-semibold">Ort auswählen:</label>
+      <select id="location_select" name="location" class="border rounded px-2 py-1 w-full" onchange="this.form.submit()">
+        <option value="">-- Ort wählen --</option>
+        {% for location in locations %}
+          <option value="{{ location.id }}" {% if selected_location and location.id == selected_location.id %}selected{% endif %}>{{ location.name }}</option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+  <div class="flex-1 flex flex-col items-center justify-center">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow p-6 mt-8">
+      {% if selected_location %}
+        <h2 class="text-xl font-semibold mb-4">Ort Details</h2>
+        <form method="post" class="space-y-2">
+          {% csrf_token %}
+          <div>
+            <label class="font-semibold">Name:</label>
+            <input type="text" name="name" value="{{ selected_location.name }}" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div class="flex gap-2">
+            <button type="submit" name="action" value="update" class="bg-blue-600 text-white px-4 py-2 rounded">Speichern</button>
+            <button type="submit" name="action" value="delete" class="bg-red-600 text-white px-4 py-2 rounded" onclick="return confirm('Wirklich löschen?')">Löschen</button>
+          </div>
+        </form>
+      {% else %}
+        <h2 class="text-xl font-semibold mb-4">Neuen Ort anlegen</h2>
+        <form method="post" class="space-y-2">
+          {% csrf_token %}
+          <div>
+            <label class="font-semibold">Name:</label>
+            <input type="text" name="name" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <button type="submit" name="action" value="create" class="bg-green-600 text-white px-4 py-2 rounded">Anlegen</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

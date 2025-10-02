@@ -1,0 +1,123 @@
+{% extends "theme/base.html" %}
+{% block content %}
+<div class="flex min-h-screen">
+  <!-- Sidebar -->
+  <div class="w-1/4 bg-gray-100 p-4 border-r">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <img
+        src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png"
+        alt="SPD Ratingen LOGO"
+        class="mx-auto h-20 w-auto"
+      />
+      <h1 class="mb-10 text-center text-2xl font-bold tracking-tight text-black">
+        Benutzer-Verwaltung
+      </h1>
+    </div>
+    <h2 class="text-lg font-semibold mb-4">Benutzer</h2>
+    <form method="get" class="mb-4">
+      <label for="user_select" class="font-semibold">Benutzer auswählen:</label>
+      <select id="user_select" name="user" class="border rounded px-2 py-1 w-full" onchange="this.form.submit()">
+        <option value="">-- Benutzer wählen --</option>
+        {% for user in users %}
+          <option value="{{ user.id }}" {% if selected_user and user.id == selected_user.id %}selected{% endif %}>{{ user.get_full_name|default:user.username }}</option>
+        {% endfor %}
+      </select>
+    </form>
+
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 flex flex-col items-center justify-center">
+    <div class="w-full max-w-2xl bg-white rounded-lg shadow p-6 mt-8">
+      {% if selected_user %}
+        <h2 class="text-xl font-semibold mb-4">Benutzerdetails</h2>
+        <form method="post" class="space-y-2">
+          {% csrf_token %}
+          <h3 class="text-lg font-semibold mb-2">Benutzer- und Profildaten bearbeiten</h3>
+          <div><span class="font-semibold">Benutzername:</span> {{ selected_user.username }}</div>
+          <div>
+            <label class="font-semibold">E-Mail:</label>
+            <input type="email" name="email" value="{{ selected_user.email }}" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div>
+            <label class="font-semibold">Vorname:</label>
+            <input type="text" name="first_name" value="{{ selected_user.first_name }}" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div>
+            <label class="font-semibold">Nachname:</label>
+            <input type="text" name="last_name" value="{{ selected_user.last_name }}" class="border rounded px-2 py-1 w-full" />
+          </div>
+          <div>
+            <label class="font-semibold">Aktiv:</label>
+            <input type="checkbox" name="is_active" value="1" {% if selected_user.is_active %}checked{% endif %} />
+          </div>
+          <div><span class="font-semibold">Letzter Login:</span> {{ selected_user.last_login }}</div>
+          <div><span class="font-semibold">Datum erstellt:</span> {{ selected_user.date_joined }}</div>
+          {% if selected_profile %}
+            <div>
+              <label class="font-semibold">Geburtsdatum:</label>
+              <input type="date" name="geburtsdatum" value="{{ selected_profile.geburtsdatum|date:'Y-m-d' }}" class="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label class="font-semibold">Telefonnummer:</label>
+              <input type="text" name="telefonnummer" value="{{ selected_profile.telefonnummer }}" class="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label class="font-semibold">Position:</label>
+              <select name="position" class="border rounded px-2 py-1 w-full">
+                <option value="">---</option>
+                {% for pos in positions %}
+                  <option value="{{ pos.id }}" {% if selected_profile.position and pos.id == selected_profile.position.id %}selected{% endif %}>{{ pos.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          {% endif %}
+          <button type="submit" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded">Speichern</button>
+        </form>
+      {% else %}
+        <div class="text-gray-500 mb-6">Bitte wähle einen Benutzer aus der Liste aus.</div>
+        <div class="w-full max-w-lg mx-auto">
+          <h3 class="text-md font-semibold mb-2">Neuen Benutzer anlegen</h3>
+          <form method="post" action="?add_user=1" class="space-y-2">
+            {% csrf_token %}
+            <div>
+              <label class="font-semibold">E-Mail:</label>
+              <input type="email" name="new_email" class="border rounded px-2 py-1 w-full" required />
+            </div>
+            <div>
+              <label class="font-semibold">Vorname:</label>
+              <input type="text" name="new_first_name" class="border rounded px-2 py-1 w-full" required />
+            </div>
+            <div>
+              <label class="font-semibold">Nachname:</label>
+              <input type="text" name="new_last_name" class="border rounded px-2 py-1 w-full" required />
+            </div>
+            <div>
+              <label class="font-semibold">Passwort:</label>
+              <input type="password" name="new_password" class="border rounded px-2 py-1 w-full" required />
+            </div>
+            <div>
+              <label class="font-semibold">Position:</label>
+              <select name="new_position" class="border rounded px-2 py-1 w-full">
+                <option value="">---</option>
+                {% for pos in positions %}
+                  <option value="{{ pos.id }}">{{ pos.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div>
+              <label class="font-semibold">Geburtsdatum:</label>
+              <input type="date" name="new_geburtsdatum" class="border rounded px-2 py-1 w-full" />
+            </div>
+            <div>
+              <label class="font-semibold">Telefonnummer:</label>
+              <input type="text" name="new_telefonnummer" class="border rounded px-2 py-1 w-full" />
+            </div>
+            <button type="submit" class="mt-2 bg-green-500 text-white px-4 py-2 rounded">Benutzer anlegen</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}

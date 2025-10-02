@@ -1,3 +1,19 @@
-{% include "theme/base.html" %} {% block content %}
-<h1>TEST</h1>
+{% extends "theme/base.html" %}
+{% block content %}
+<div class="max-w-2xl mx-auto mt-10">
+	<h1 class="text-2xl font-bold mb-6">Meine Termine</h1>
+	{% if appointments %}
+		<ul class="space-y-4">
+			{% for appointment in appointments %}
+				<li class="p-4 bg-white rounded shadow flex flex-col gap-1">
+					<span class="font-semibold">{{ appointment.committee.name }}</span>
+					<span>{{ appointment.date|date:"d.m.Y H:i" }}</span>
+					<span class="text-gray-500">Ort: {{ appointment.location.name }}</span>
+				</li>
+			{% endfor %}
+		</ul>
+	{% else %}
+		<p>Keine Termine gefunden, bei denen Sie anwesend waren.</p>
+	{% endif %}
+</div>
 {% endblock content %}
