@@ -1,0 +1,35 @@
+{% extends 'theme/base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Neue Person anlegen</h1>
+<form method="post" class="space-y-4 max-w-md bg-white p-6 rounded shadow">
+  {% csrf_token %}
+  <div>
+    <label for="id_name" class="block font-semibold mb-1">Name:</label>
+    <input type="text" name="name" id="id_name" required class="w-full border rounded px-3 py-2">
+  </div>
+  <div>
+    <label for="id_email" class="block font-semibold mb-1">E-Mail:</label>
+    <input type="email" name="email" id="id_email" required class="w-full border rounded px-3 py-2">
+  </div>
+  <div>
+    <label for="id_funktion" class="block font-semibold mb-1">Funktion:</label>
+    <select name="funktion" id="id_funktion" class="w-full border rounded px-3 py-2">
+      <option value="">-- keine --</option>
+      {% for funktion in funktionen %}
+        <option value="{{ funktion.id }}">{{ funktion.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label class="block font-semibold mb-1">Gremien:</label>
+    <div class="flex flex-wrap gap-2">
+      {% for gremium in gremien %}
+        <label class="inline-flex items-center">
+          <input type="checkbox" name="gremien" value="{{ gremium.id }}" class="mr-2"> {{ gremium.name }}
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Speichern</button>
+</form>
+{% endblock %}

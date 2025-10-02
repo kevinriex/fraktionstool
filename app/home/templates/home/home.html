@@ -1,0 +1,52 @@
+{% include "theme/base.html" %} {% block content %}
+<div class="flex items-center justify-center min-h-screen flex-col">
+  <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <img
+      src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png"
+      alt="SPD Ratingen LOGO"
+      class="mx-auto h-20 w-auto"
+    />
+    <h1
+      class="mb-10 text-center text-2xl font-bold tracking-tight text-white"
+    >
+      Deine Fraktionsarbeit
+    </h1>
+  </div>
+  <div class="grid grid-cols-3 gap-8 pt-40">
+    <a
+      href="https://ratsinfo.ratingen.de"
+      class="px-8 py-6 bg-blue-600 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-blue-700 transition"
+      >RIS</a
+    >
+    <a
+      href="https://cloud.spd-ratingen.net/apps/files/files/11732?dir=/FRAKTION"
+      class="px-8 py-6 bg-green-600 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-green-700 transition"
+      >Cloud</a
+    >
+    <a
+      href="/presence"
+      class="px-8 py-6 bg-red-600 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-red-700 transition"
+      >Anwesenheit</a
+    >
+    <a
+      href="https://geoportal.ratingen.de/WebOffice_ratingen/synserver?project=extern&client=flex&skin=rot&view=Baumkarte"
+      class="px-8 py-6 bg-purple-600 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-purple-700 transition"
+      >Geoportal</a
+    >
+    <a
+      href="https://ratingen.maengelmelder.de/#pageid=1"
+      class="px-8 py-6 bg-yellow-500 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-yellow-600 transition"
+      >Mängelmelder</a
+    >
+    {% comment %} <a
+      href="#"
+      class="px-8 py-6 bg-pink-600 text-white rounded-lg text-xl font-semibold text-center shadow hover:bg-pink-700 transition"
+      >Button 6</a
+    > {% endcomment %}
+  </div>
+  <div class="pt-10">
+    <div class="px-4 py-6 mt-auto">
+        <a href="{% url 'logout' %}" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Abmelden</a>
+    </div>
+</div>
+{% endblock content %}

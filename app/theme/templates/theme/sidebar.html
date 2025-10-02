@@ -1,0 +1,22 @@
+{% load static %}
+<aside class="w-64 bg-white shadow-lg flex flex-col">
+    <div class="h-20 flex items-center justify-center border-b">
+        <span class="text-2xl font-bold text-blue-700 tracking-wide"><img src="https://www.spd-ratingen.de/wp-content/uploads/sites/524/2022/09/kopie-von-logo-fu-r-sozis-website-im-spd-design-600x150.png"></img></span>
+    </div>
+    <nav class="flex-1 px-4 py-6 space-y-2">
+        {# Sidebar navigation links here #}
+        {# Uncomment and adjust as needed #}
+        {#
+        <a href="{% url 'presence:presence_matrix' %}" class="block px-3 py-2 rounded hover:bg-blue-100 font-semibold text-blue-700">presence</a>
+        <div class="mt-6 mb-2 text-xs uppercase text-gray-400 font-bold tracking-wider">Verwaltung</div>
+        <a href="{% url 'presence:person_list' %}" class="block px-3 py-2 rounded hover:bg-blue-100">Personen</a>
+        <a href="{% url 'presence:gremium_list' %}" class="block px-3 py-2 rounded hover:bg-blue-100">Gremien</a>
+        <a href="{% url 'presence:funktion_list' %}" class="block px-3 py-2 rounded hover:bg-blue-100">Funktionen</a>
+        <a href="{% url 'presence:ort_list' %}" class="block px-3 py-2 rounded hover:bg-blue-100">Orte</a>
+        <a href="{% url 'presence:termin_add' %}" class="block px-3 py-2 rounded hover:bg-blue-100">Termin anlegen</a>
+        #}
+    </nav>
+    <div class="px-4 py-6 mt-auto">
+        <a href="{% url 'logout' %}" class="block w-full text-center px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Abmelden</a>
+    </div>
+</aside>

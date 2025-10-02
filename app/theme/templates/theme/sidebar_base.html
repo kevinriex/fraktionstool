@@ -1,0 +1,11 @@
+{% extends "theme/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="flex min-h-screen">
+    {% include "theme/sidebar.html" %}
+    <main class="flex-1 p-8">
+        {% block page_content %}{% endblock page_content %}
+    </main>
+</div>
+{% endblock content %}

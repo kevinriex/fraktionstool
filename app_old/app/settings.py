@@ -37,10 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'presence',
+    'anwesenheit',
     'tailwind',
-    'theme',
-    'auth.apps.CustomAuthConfig',
+    'theme'
 ]
 
 TAILWIND_APP_NAME = 'theme'
@@ -61,10 +60,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            BASE_DIR / "presence/templates",
+            BASE_DIR / "anwesenheit/templates",
             BASE_DIR / "theme/templates",
-            BASE_DIR / "auth/templates",
-            BASE_DIR / "home/templates"
+            BASE_DIR / "auth/templates"
         ],
         'APP_DIRS': True,
         'OPTIONS': {

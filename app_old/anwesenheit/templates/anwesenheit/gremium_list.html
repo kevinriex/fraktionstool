@@ -1,0 +1,12 @@
+{% extends 'theme/base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Gremien verwalten</h1>
+<a href="{% url 'anwesenheit:gremium_add' %}" class="inline-block mb-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Neues Gremium anlegen</a>
+<ul class="space-y-2">
+  {% for gremium in gremien %}
+    <li class="p-2 bg-gray-100 rounded">{{ gremium.name }}</li>
+  {% empty %}
+    <li class="text-gray-500">Keine Gremien vorhanden.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

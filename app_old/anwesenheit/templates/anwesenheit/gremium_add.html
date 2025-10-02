@@ -1,0 +1,12 @@
+{% extends 'theme/base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Neues Gremium anlegen</h1>
+<form method="post" class="space-y-4 max-w-md bg-white p-6 rounded shadow">
+  {% csrf_token %}
+  <div>
+    <label for="id_name" class="block font-semibold mb-1">Name:</label>
+    <input type="text" name="name" id="id_name" required class="w-full border rounded px-3 py-2">
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Speichern</button>
+</form>
+{% endblock %}

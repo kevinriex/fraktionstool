@@ -1,0 +1,38 @@
+{% extends 'theme/base.html' %}
+{% block content %}
+<h1 class="text-2xl font-bold mb-4">Termin anlegen</h1>
+<form method="post" class="space-y-4 max-w-lg bg-white p-6 rounded shadow">
+  {% csrf_token %}
+  <div>
+    <label for="id_ort" class="block font-semibold mb-1">Ort:</label>
+    <select name="ort" id="id_ort" required class="w-full border rounded px-3 py-2">
+      {% for ort in orte %}
+        <option value="{{ ort.id }}">{{ ort.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label for="id_datum" class="block font-semibold mb-1">Datum und Uhrzeit:</label>
+    <input type="datetime-local" name="datum" id="id_datum" required class="w-full border rounded px-3 py-2">
+  </div>
+  <div>
+    <label for="id_gremium" class="block font-semibold mb-1">Gremium:</label>
+    <select name="gremium" id="id_gremium" required class="w-full border rounded px-3 py-2">
+      {% for gremium in gremien %}
+        <option value="{{ gremium.id }}">{{ gremium.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div>
+    <label class="block font-semibold mb-1">Anwesende:</label>
+    <div class="flex flex-wrap gap-2">
+      {% for person in personen %}
+        <label class="inline-flex items-center">
+          <input type="checkbox" name="anwesende" value="{{ person.id }}" class="mr-2"> {{ person.name }}
+        </label>
+      {% endfor %}
+    </div>
+  </div>
+  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Termin speichern</button>
+</form>
+{% endblock %}
