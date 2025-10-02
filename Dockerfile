@@ -8,9 +8,12 @@ ENV PYTHONUNBUFFERED 1
 # Set work directory
 WORKDIR /app
 
-# Install system dependencies
+
+# Install system dependencies and Node.js (for Tailwind)
 RUN apt-get update && \
-    apt-get install -y build-essential libpq-dev curl && \
+    apt-get install -y build-essential libpq-dev curl gnupg && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy requirements (if exists) and install
