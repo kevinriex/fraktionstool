@@ -1,0 +1,31 @@
+services:
+  web:
+    build: .
+    command: sh -c "python manage.py migrate && python manage.py tailwind build && python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./app:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1
+      - PYTHONUNBUFFERED=1
+    labels:
+labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.fraktion.rule=Host(`fraktion.spd-ratingen.net`)"
+      - "traefik.http.routers.fraktion.entrypoints=web"
+      - "traefik.http.middlewares.fraktion-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.fraktion.middlewares=fraktion-https-redirect"
+      - "traefik.http.routers.fraktion-secure.entrypoints=websecure"
+      - "traefik.http.routers.fraktion-secure.rule=Host(`fraktion.spd-ratingen.net`)"
+      - "traefik.http.routers.fraktion-secure.tls=true"
+      - "traefik.http.routers.fraktion-secure.tls.certresolver=production"
+
+    # Uncomment if you want to use a custom .env file
+    # env_file:
+    #   - .env
+
+# Add a database service here if you use Postgres/MySQL
+#   db:
+#     image: postgres:15
+#     ...
